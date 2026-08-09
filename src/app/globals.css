@@ -1,26 +1,159 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --page-bg: #eef0f7;
+  --background: #eef0f7;
+  --foreground: #0b1f3f;
+  --navy: #0b1f3f;
+  --panel: #060b1f;
+  --panel-2: #0a1330;
+  --blue: #1d4ed8;
+  --blue-light: #3b82f6;
+  --green: #22c55e;
+  --green-light: #4ade80;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-navy: var(--navy);
+  --color-panel: var(--panel);
+  --color-brand-blue: var(--blue);
+  --color-brand-blue-light: var(--blue-light);
+  --color-brand-green: var(--green);
+  --color-brand-green-light: var(--green-light);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.brand-gradient-text {
+  background: linear-gradient(90deg, var(--blue) 0%, var(--green) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-gradient-bg {
+  background: linear-gradient(120deg, var(--blue) 0%, var(--green-light) 100%);
+}
+
+/* Dark hero / section panel, in the spirit of the reference: deep navy card
+   with soft vertical brand-colored glow rays and radial glows. */
+.dark-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: radial-gradient(120% 100% at 15% 0%, #101c40 0%, var(--panel) 55%),
+    var(--panel);
+}
+
+.dark-panel::before {
+  content: "";
+  position: absolute;
+  inset: -10% -20%;
+  z-index: 0;
+  opacity: 0.35;
+  background-image: repeating-linear-gradient(
+    100deg,
+    rgba(59, 130, 246, 0.35) 0px,
+    rgba(59, 130, 246, 0.35) 1px,
+    transparent 1px,
+    transparent 34px
+  );
+  mask-image: linear-gradient(to bottom, transparent, black 30%, black 75%, transparent);
+  animation: panel-rays-drift 40s linear infinite;
+}
+
+.dark-panel::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 60%;
+  height: 60%;
+  right: -10%;
+  bottom: -20%;
+  background: radial-gradient(closest-side, rgba(34, 197, 94, 0.28), transparent);
+  filter: blur(10px);
+  animation: panel-glow-drift 12s ease-in-out infinite;
+}
+
+@keyframes panel-rays-drift {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(120px);
+  }
+}
+
+@keyframes panel-glow-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.28;
+  }
+  50% {
+    transform: translate(-6%, 8%) scale(1.18);
+    opacity: 0.42;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dark-panel::before,
+  .dark-panel::after {
+    animation: none;
+  }
+}
+
+.dark-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.dark-panel > .spotlight-layer {
+  position: absolute;
+  z-index: 0;
+}
+
+.dark-glow-blue {
+  background: radial-gradient(closest-side, rgba(59, 130, 246, 0.35), transparent);
+}
+
+.ghost-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(11, 31, 63, 0.08);
+  background: linear-gradient(180deg, rgba(11, 31, 63, 0.1), rgba(11, 31, 63, 0));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.pill-nav {
+  background: rgba(6, 11, 31, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+}
+
+.spotlight-layer {
+  background: radial-gradient(
+    500px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(255, 255, 255, 0.08),
+    transparent 60%
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
